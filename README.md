@@ -1,27 +1,49 @@
-# GST Reconciliation Pro (Prototype)
+# GST Reconciliation Pro
 
-## Run locally
-1. Install Python 3.10 or newer.
-2. Open a terminal in this folder.
-3. Run:
-   `pip install -r requirements.txt`
-4. Run:
-   `streamlit run app.py`
-5. Open the local URL shown in the terminal.
+A modern, high-performance React application for automated invoice-level reconciliation between **GSTR-1** (JSON, Excel, CSV) and **E-Way Bill** (Excel, CSV) reports.
 
-## Public website hosting
-This project can be deployed to a Python hosting service that supports Streamlit. A public deployment is not included in this ZIP; it requires a hosting account and deployment configuration.
+## Features
 
-## Current prototype features
-- Upload GSTR-1 Excel/CSV/JSON and E-Way Bill Excel/CSV.
-- Dashboard counts and category filtering.
-- Invoice number + GSTIN matching.
-- Date and amount mismatch checks.
-- Excel download with category sheets.
-- Duplicate invoice review category.
+- **Multi-Format Ingestion**:
+  - GSTR-1 direct portal JSON downloads (with automatic item rate aggregation across B2B, B2BA, B2CL, B2CLA, EXP, CDNR, and CDNUR sections).
+  - Excel reports (`.xlsx`, `.xls`) with intelligent sheet prioritization and automatic header row detection.
+  - CSV exports from official GST & NIC portals.
+- **Automated Column Detection**:
+  - Fuzzy and alias matching across all standard Indian GST and E-Way Bill field variations.
+  - Manual Column Mapping fallback modal when custom spreadsheet layouts are used.
+- **Discrepancy & Matching Engine**:
+  - **Matched**: Invoices where document number, recipient GSTIN, dates, taxable amounts, and tax values align within a user-customizable tolerance (₹).
+  - **Unmatched**: Exact breakdown of date variances and tax component differences (Taxable, IGST, CGST, SGST, Total).
+  - **E-Way Bill Not Found**: Sales reported in GSTR-1 with no matching movement documentation.
+  - **Extra E-Way Bill**: E-Way bills generated on the portal that are omitted from sales returns.
+  - **Review - Duplicate**: Automated flag for duplicate invoices within source files.
+- **Interactive Dashboard**:
+  - Summary metric cards with 1-click drilldown filtering.
+  - Fast client-side search across invoice numbers and GSTINs.
+  - Formatted currency and date views with pagination support.
+- **Multi-Sheet Excel Export**:
+  - Download comprehensive reconciliation reports formatted into categorized tabs (`All Reconciliation`, `Matched`, `Unmatched`, `EWB Missing`, `Extra EWB`, `Review`).
+- **Privacy First**:
+  - 100% client-side computation. Tax data never leaves your browser session.
+- **Built-in Demo Dataset**:
+  - 1-click demo dataset to test all matching scenarios instantly.
 
-## Important limitations
-- GST report layouts differ; verify detected column mappings and test on sample files.
-- Nested GSTR-1 JSON structures may need specific schema mapping.
-- Matching is based primarily on invoice number and GSTIN. It is not a legal assessment of E-Way Bill applicability.
-- Do not upload sensitive client data to a public deployment until authentication, access controls, retention and security have been configured.
+## Tech Stack
+
+- **Framework**: React 19 + TypeScript + Vite
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **Spreadsheet Engine**: SheetJS (`xlsx`)
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start local dev server (port 3000)
+npm run dev
+
+# Production build
+npm run build
+```
